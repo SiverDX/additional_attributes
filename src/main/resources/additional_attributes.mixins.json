@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "package": "de.cadentem.additional_attributes.mixin",
+  "plugin": "de.cadentem.additional_attributes.mixin.ApplyMixinPlugin",
+  "refmap": "additional_attributes.refmap.json",
+  "mixins": [
+    "EntityAccess",
+    "FishingHookAccess",
+    "FishingHookMixin",
+    "FishingRodMixin",
+    "LivingEntityMixin",
+    "aquaculture.AquaFishingBobberEntityMixin",
+    "aquaculture.AquaFishingRodItemMixin",
+    "irons_spellbooks.AbstractSpellMixin",
+    "irons_spellbooks.MixinScroll",
+    "irons_spellbooks.SchoolRegistryMixin",
+    "irons_spellbooks.SpellRegistryMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
