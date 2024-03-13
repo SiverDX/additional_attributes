@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[46,)"
 license="${mod_license}"
 
 [[mods]]
@@ -16,20 +16,20 @@ itemIcon = "minecraft:book"
 [[dependencies.additional_attributes]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[46,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.additional_attributes]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2]"
+versionRange = "[1.20,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.additional_attributes]]
 modId = "irons_spellbooks"
 mandatory = false
-versionRange = "[1.19.2-2,)"
+versionRange = "[1.20.1-2,)"
 ordering = "AFTER"
 side = "BOTH"

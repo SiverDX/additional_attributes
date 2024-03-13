@@ -1,3 +1,3 @@
-// 1.19.2	2024-03-13T11:07:52.1420509	Global Loot Modifiers : additional_attributes
+// 1.20.1	2024-03-13T17:39:41.0985365	Global Loot Modifiers : additional_attributes
 cd8dba3f64f62480755ed5735ba59f57b2c252c7 data/additional_attributes/loot_modifiers/harvest_loot_amplifier.json
 f7bab0d99c35736ff487dbbeaac1f27700b6d7c5 data/forge/loot_modifiers/global_loot_modifiers.json

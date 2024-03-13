@@ -2,13 +2,13 @@ package de.cadentem.additional_attributes.datagen;
 
 import de.cadentem.additional_attributes.AA;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class AALanguageProvider extends LanguageProvider {
-    public AALanguageProvider(final DataGenerator generator, final String locale) {
-        super(generator, AA.MODID, locale);
+    public AALanguageProvider(final PackOutput output, final String locale) {
+        super(output, AA.MODID, locale);
     }
 
     @Override

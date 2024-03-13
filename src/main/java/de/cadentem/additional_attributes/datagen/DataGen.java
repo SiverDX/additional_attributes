@@ -10,7 +10,7 @@ public class DataGen {
     @SubscribeEvent
     public static void configureDataGen(final GatherDataEvent event){
         DataGenerator generator = event.getGenerator();
-        generator.addProvider(event.includeClient(), new AALanguageProvider(generator, "en_us"));
-        generator.addProvider(event.includeServer(), new AALootModifiers(generator));
+        generator.addProvider(event.includeClient(), new AALanguageProvider(generator.getPackOutput(), "en_us"));
+        generator.addProvider(event.includeServer(), new AALootModifiers(generator.getPackOutput()));
     }
 }
