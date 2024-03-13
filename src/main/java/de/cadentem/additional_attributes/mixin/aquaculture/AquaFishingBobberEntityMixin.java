@@ -8,14 +8,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AquaFishingBobberEntity.class)
-@Debug(export = true)
 public abstract class AquaFishingBobberEntityMixin extends FishingHook {
     public AquaFishingBobberEntityMixin(final Player player, final Level level, int luck, int lureSpeed) {
         super(player, level, luck, lureSpeed);
