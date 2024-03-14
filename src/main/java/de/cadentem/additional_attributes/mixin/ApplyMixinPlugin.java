@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ApplyMixinPlugin implements IMixinConfigPlugin {
-    private final static String PREFIX = ApplyMixinPlugin.class.getPackageName();
+    private final static String PREFIX = ApplyMixinPlugin.class.getPackageName() + ".";
 
     @Override
     public void onLoad(final String mixinPackage) { /* Nothing to do */ }
