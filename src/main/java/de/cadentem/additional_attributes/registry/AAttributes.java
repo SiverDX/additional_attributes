@@ -31,7 +31,13 @@ public class AAttributes {
 
     @SubscribeEvent
     public static void setAttributes(final EntityAttributeModificationEvent event) {
-        ATTRIBUTES.getEntries().forEach(attribute -> event.add(EntityType.PLAYER, attribute.get()));
+        ATTRIBUTES.getEntries().forEach(attribute -> {
+            if (attribute.getId().getPath().startsWith("spell")) {
+                event.getTypes().forEach(type -> event.add(type, attribute.get()));
+            } else {
+                event.add(EntityType.PLAYER, attribute.get());
+            }
+        });
     }
 
     @SuppressWarnings("ConstantConditions")

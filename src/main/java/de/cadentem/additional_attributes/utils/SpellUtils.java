@@ -9,16 +9,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpellUtils {
     private static final ResourceLocation SPELL_GENERAL = new ResourceLocation(AA.MODID, "spell_general");
 
-    public static int calculateSpellLevel(final Player player, final AbstractSpell spell, int originalLevel) {
+    public static int calculateSpellLevel(@Nullable final LivingEntity livingEntity, final AbstractSpell spell, int originalLevel) {
+        if (livingEntity == null) {
+            return originalLevel;
+        }
+
         Attribute generalAttribute = ForgeRegistries.ATTRIBUTES.getValue(SPELL_GENERAL);
         Attribute schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, "spell_school_" + spell.getSchoolType().getId().getPath()));
         Attribute spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, "spell_type_" + spell.getSpellName()));
@@ -27,9 +31,9 @@ public class SpellUtils {
         List<AttributeModifier> multiplyBase = new ArrayList<>();
         List<AttributeModifier> multiplyTotal = new ArrayList<>();
 
-        fillModifiers(player, generalAttribute, addition, multiplyBase, multiplyTotal);
-        fillModifiers(player, schoolAttribute, addition, multiplyBase, multiplyTotal);
-        fillModifiers(player, spellAttribute, addition, multiplyBase, multiplyTotal);
+        fillModifiers(livingEntity, generalAttribute, addition, multiplyBase, multiplyTotal);
+        fillModifiers(livingEntity, schoolAttribute, addition, multiplyBase, multiplyTotal);
+        fillModifiers(livingEntity, spellAttribute, addition, multiplyBase, multiplyTotal);
 
         double base = originalLevel;
 
