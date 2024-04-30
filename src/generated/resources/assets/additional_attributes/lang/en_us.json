@@ -169,6 +169,8 @@
   "attribute.additional_attributes.spell_type_sculk_tentacles.desc": "Modifies the level of this spell",
   "attribute.additional_attributes.spell_type_shield": "Shield Spell Level",
   "attribute.additional_attributes.spell_type_shield.desc": "Modifies the level of this spell",
+  "attribute.additional_attributes.spell_type_shockwave": "Shockwave Spell Level",
+  "attribute.additional_attributes.spell_type_shockwave.desc": "Modifies the level of this spell",
   "attribute.additional_attributes.spell_type_slow": "Slow Spell Level",
   "attribute.additional_attributes.spell_type_slow.desc": "Modifies the level of this spell",
   "attribute.additional_attributes.spell_type_sonic_boom": "Sonic Boom Spell Level",
