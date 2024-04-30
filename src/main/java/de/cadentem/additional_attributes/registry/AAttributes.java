@@ -26,7 +26,7 @@ public class AAttributes {
     public static final RegistryObject<Attribute> HARVEST_BONUS = createAttribute("harvest");
 
     public static RegistryObject<Attribute> createAttribute(final String id) {
-        return ATTRIBUTES.register(id, () -> new RangedAttribute("attribute." + AA.MODID + "." + id, 0, -MAX, MAX).setSyncable(true));
+        return ATTRIBUTES.register(id, () -> new RangedAttribute("attribute." + AA.MODID + "." + id, 0, 0, MAX).setSyncable(true));
     }
 
     @SubscribeEvent
@@ -35,24 +35,19 @@ public class AAttributes {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static int getIntValue(final LivingEntity entity, final Attribute attribute, int base) {
+    public static int getIntValue(final LivingEntity entity, final Attribute attribute, double base) {
         if (/* Can be null */ entity.getAttributes() == null || !entity.getAttributes().hasAttribute(attribute)) {
-            return base;
+            return (int) base;
         }
 
         double value = getAttributeValue(entity, attribute, base);
         int clippedValue = (int) value;
 
         if (entity.getRandom().nextFloat() < value - clippedValue) {
-            clippedValue++;
+            value++;
         }
 
-        if (clippedValue < 0) {
-            // It does not make sense to get -1 crops or sth. like that
-            return Math.min(0, base);
-        }
-
-        return clippedValue;
+        return (int) value;
     }
 
     public static double getAttributeValue(final LivingEntity entity, final Attribute attribute, double base) {
