@@ -201,5 +201,11 @@
   "attribute.additional_attributes.spell_type_wisp.desc": "Modifies the level of this spell",
   "attribute.additional_attributes.spell_type_wither_skull": "Wither Skull Spell Level",
   "attribute.additional_attributes.spell_type_wither_skull.desc": "Modifies the level of this spell",
+  "attribute.additional_attributes.spell_type_scorch": "Scorch Spell Level",
+  "attribute.additional_attributes.spell_type_scorch.desc": "Modifies the level of this spell",
+  "attribute.additional_attributes.spell_type_thunderstorm": "Thunderstorm Spell Level",
+  "attribute.additional_attributes.spell_type_thunderstorm.desc": "Modifies the level of this spell",
+  "attribute.additional_attributes.spell_type_wololo": "Wololo Spell Level",
+  "attribute.additional_attributes.spell_type_wololo.desc": "Modifies the level of this spell",
   "ui.additional_attributes.cast_error_no_spell_level": "You do not possess the knowledge required to cast this spell"
 }
