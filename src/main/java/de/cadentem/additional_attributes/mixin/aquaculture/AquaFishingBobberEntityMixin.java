@@ -19,7 +19,7 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
         super(player, level, luck, lureSpeed);
     }
 
-    @Inject(method = "catchingFish", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, ordinal = 11, shift = At.Shift.AFTER))
+    @Inject(method = "catchingFish", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lcom/teammetallurgy/aquaculture/entity/AquaFishingBobberEntity;timeUntilLured:I", ordinal = 3, shift = At.Shift.AFTER))
     private void additional_attributes$fixLure(final BlockPos position, final CallbackInfo callback) {
         ((FishingHookAccess) this).setTimeUntilLured(Utils.getTicksCaughtDelay(this));
     }

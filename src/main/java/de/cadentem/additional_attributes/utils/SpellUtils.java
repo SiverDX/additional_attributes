@@ -2,6 +2,7 @@ package de.cadentem.additional_attributes.utils;
 
 import de.cadentem.additional_attributes.AA;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
+import de.cadentem.additional_attributes.config.ServerConfig;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -51,7 +52,7 @@ public class SpellUtils {
             result *= 1 + modifier.getAmount();
         }
 
-        if (spell.getMaxLevel() == 1 && result > 1) {
+        if (spell.getMaxLevel() == 1 && result > 1 && !ServerConfig.ALLOW_MAX_LEVEL_ONE_INCREASES.get()) {
             // Normally this means the spell does not scale with level
             return originalLevel;
         }

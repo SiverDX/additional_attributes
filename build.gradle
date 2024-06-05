@@ -83,14 +83,14 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     /* --- Other --- */
-    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5293761") // 1.19.2 - 3.1.4
+    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5377912") // 1.19.2 - 3.1.17
     /* irons_spellbooks */ implementation fg.deobf("curse.maven:playeranimator-658587:4418149") // 1.19.2 - 1.0.2
     /* irons_spellbooks */ implementation fg.deobf("curse.maven:caelus-308989:3929284") // 1.19.2 - 3.0.0.6
     /* irons_spellbooks */ implementation fg.deobf("curse.maven:geckolib-388172:4407241") // 1.19.2 - 3.1.40
     /* irons_spellbooks */ implementation fg.deobf("curse.maven:curios-309927:4985476") // 1.19.2 - 5.1.4.4
 
     /* --- For Mixin --- */
-    compileOnly fg.deobf("curse.maven:aquaculture-60028:4074684") // 1.19.2 - 2.4.8
+    implementation fg.deobf("curse.maven:aquaculture-60028:5320128") // 1.19.2 - 2.4.17
 
     /* --- Mixin Configuration --- */
 //    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:${mixin_squared_version}"))
