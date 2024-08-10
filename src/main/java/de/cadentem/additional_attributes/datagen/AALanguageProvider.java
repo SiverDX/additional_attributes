@@ -46,8 +46,13 @@ public class AALanguageProvider extends LanguageProvider {
                 return;
             }
 
+            if (handleInnateAttribute(location)) {
+                return;
+            }
+
             String[] split = path.split("_");
 
+            // Convert the technical name (e.g. cloud_of_regeneration) to a more readable one (e.g. Cloud Of Regeneration)
             for (/* Skip prefix (e.g. `spell_type_`) */ int i = 2; i < split.length; i++) {
                 readable.append(Character.toUpperCase(split[i].charAt(0)));
                 readable.append(split[i].substring(1));
@@ -65,5 +70,35 @@ public class AALanguageProvider extends LanguageProvider {
                 }
             }
         });
+    }
+
+    private boolean handleInnateAttribute(final ResourceLocation location) {
+        boolean isSchool = location.getPath().startsWith(ISAttributes.INNATE_SCHOOL_PREFIX);
+        boolean isSpell = location.getPath().startsWith(ISAttributes.INNATE_SPELL_PREFIX);
+
+        if (!isSchool && !isSpell) {
+            return false;
+        }
+
+        String[] elements = location.toString().split("/");
+        // 0: The prefix
+        // 1: the namespace
+        String[] nameParts = elements[2].split("_");
+        StringBuilder name = new StringBuilder();
+
+        for (String namePart : nameParts) {
+            // Convert the technical name (e.g. cloud_of_regeneration) to a more readable one (e.g. Cloud Of Regeneration)
+            name.append(Character.toUpperCase(namePart.charAt(0))).append(namePart.substring(1));
+        }
+
+        if (isSchool) {
+            add("attribute." + location.toLanguageKey(), "Innate School: " + name);
+            add("attribute." + location.toLanguageKey() + ".desc", "Grants all spells of this school (level is based on attribute value)");
+        } else {
+            add("attribute." + location.toLanguageKey(), "Innate Spell: " + name);
+            add("attribute." + location.toLanguageKey() + ".desc", "Grants this spell (level is based on attribute value)");
+        }
+
+        return true;
     }
 }

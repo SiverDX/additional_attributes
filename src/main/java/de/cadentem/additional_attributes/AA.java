@@ -34,9 +34,6 @@ public class AA {
             MinecraftForge.EVENT_BUS.addListener(ISEvents::modifySpellSelection);
             MinecraftForge.EVENT_BUS.addListener(ISEvents::initListsServer);
             MinecraftForge.EVENT_BUS.addListener(ISEvents::initListsClient);
-            MinecraftForge.EVENT_BUS.addListener(ISEvents::reload);
-            MinecraftForge.EVENT_BUS.addListener(ISEvents::clear);
-            MinecraftForge.EVENT_BUS.addListener(ISEvents::test);
         }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);

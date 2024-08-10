@@ -1,21 +1,18 @@
 package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
 import de.cadentem.additional_attributes.AA;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class ISAttributes {
-    public static HashMap<Player, Boolean> SHOULD_RELOAD = new HashMap<>();
-
     public static List<Attribute> INNATE_SCHOOLS;
     public static List<Attribute> INNATE_SPELLS;
 
@@ -26,7 +23,7 @@ public class ISAttributes {
     public static final String SPELL_PREFIX = "spell_type_";
     public static final String SCHOOL_PREFIX = "spell_school_";
     public static final String INNATE_SPELL_PREFIX = "innate_spell/";
-    public static final String INNATE_SCHOOL_PREFIX = "innate_spell/";
+    public static final String INNATE_SCHOOL_PREFIX = "innate_school/";
 
     public static final int LIMIT = 100;
 
@@ -43,6 +40,10 @@ public class ISAttributes {
 
     public static void setAttributes(final EntityAttributeModificationEvent event) {
         ATTRIBUTES.getEntries().forEach(attribute -> event.add(EntityType.PLAYER, attribute.get()));
+    }
+
+    public static ResourceLocation getLocation(final Attribute attribute, final String prefix) {
+        return ResourceLocation.tryParse(attribute.getDescriptionId().replace(ISAttributes.DESCRIPTION_PREFIX + prefix, "").replaceFirst(ISAttributes.SEPARATOR, ":"));
     }
 
     public static boolean areInnateListsMissing() {
