@@ -16,6 +16,7 @@
     "irons_spellbooks.AbstractSpellMixin",
     "irons_spellbooks.MixinScroll",
     "irons_spellbooks.SchoolRegistryMixin",
+    "irons_spellbooks.ServerEntityMixin",
     "irons_spellbooks.SpellRegistryMixin"
   ],
   "client": [],

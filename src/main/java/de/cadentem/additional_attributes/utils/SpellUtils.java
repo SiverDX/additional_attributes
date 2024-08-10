@@ -25,8 +25,8 @@ public class SpellUtils {
         }
 
         Attribute generalAttribute = ForgeRegistries.ATTRIBUTES.getValue(SPELL_GENERAL);
-        Attribute schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, "spell_school_" + spell.getSchoolType().getId().getPath()));
-        Attribute spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, "spell_type_" + spell.getSpellName()));
+        Attribute schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX + spell.getSchoolType().getId().getPath()));
+        Attribute spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX + spell.getSpellName()));
 
         List<AttributeModifier> addition = new ArrayList<>();
         List<AttributeModifier> multiplyBase = new ArrayList<>();

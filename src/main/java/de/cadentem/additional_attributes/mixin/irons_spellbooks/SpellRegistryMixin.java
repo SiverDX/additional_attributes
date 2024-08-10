@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SpellRegistryMixin {
     @Inject(method = "registerSpell", at = @At("RETURN"))
     private static void additional_attributes$registerSpellAttribute(final AbstractSpell spell, final CallbackInfoReturnable<RegistryObject<AbstractSpell>> callback) {
-        ISAttributes.createAttribute("spell_type_" + spell.getSpellName());
+        ISAttributes.createAttribute(ISAttributes.SPELL_PREFIX + spell.getSpellName());
+        ISAttributes.createAttribute(ISAttributes.INNATE_SPELL_PREFIX + spell.getSpellResource().getNamespace() + ISAttributes.SEPARATOR + spell.getSpellResource().getPath());
     }
 }

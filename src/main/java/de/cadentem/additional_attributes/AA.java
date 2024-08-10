@@ -31,6 +31,12 @@ public class AA {
             modEventBus.addListener(ISAttributes::setAttributes);
             ISAttributes.ATTRIBUTES.register(modEventBus);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ISEvents::modifyLevel);
+            MinecraftForge.EVENT_BUS.addListener(ISEvents::modifySpellSelection);
+            MinecraftForge.EVENT_BUS.addListener(ISEvents::initListsServer);
+            MinecraftForge.EVENT_BUS.addListener(ISEvents::initListsClient);
+            MinecraftForge.EVENT_BUS.addListener(ISEvents::reload);
+            MinecraftForge.EVENT_BUS.addListener(ISEvents::clear);
+            MinecraftForge.EVENT_BUS.addListener(ISEvents::test);
         }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);

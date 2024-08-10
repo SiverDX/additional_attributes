@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SchoolRegistryMixin {
     @Inject(method = "registerSchool", at = @At("RETURN"))
     private static void additional_attributes$registerSchool(final SchoolType schoolType, final CallbackInfoReturnable<RegistryObject<SchoolType>> callback) {
-        ISAttributes.createAttribute("spell_school_" + schoolType.getId().getPath());
+        ISAttributes.createAttribute(ISAttributes.SCHOOL_PREFIX + schoolType.getId().getPath());
+        ISAttributes.createAttribute(ISAttributes.INNATE_SCHOOL_PREFIX + schoolType.getId().getNamespace() + ISAttributes.SEPARATOR + schoolType.getId().getPath());
     }
 }
