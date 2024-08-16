@@ -15,7 +15,7 @@ Can be used to increase the amount of harvested items
 - The base value is the initial harvested amount
 
 # Iron's Spells 'n Spellbooks
-Added attributes to increase (or lower) spell levels
+## Increase or decrease spell levels
 - General attribute (meaning all spells) (`additional_attributes:spell_general`)
 - Attribute for each school type (`additional_attributes:spell_school_<...>`) (e.g. `additional_attributes:spell_school_fire`)
 - Attribute for each spell type (`additional_attributes:spell_type_<...>`) (e.g. `additional_attributes:spell_type_shockwave`)
@@ -27,8 +27,14 @@ How it works:
 - There is no rounding - meaning a spell level of `1.75` will result in `1`
 - If the spell level reaches 0 (due to negative modifiers) the spell cannot be cast
 
----
+## Add spells to the spell selection
+These spells will be available independent of the current spellbook, weapon, etc.
+- Attribute for each school type (`additional_attributes:innate_school/<namespace>/<path>`)
+  - Example: `additional_attributes:innate_school/irons_spellbooks/fire`
+- Attribute for each spell type (`additional_attributes:innate_spell/<namespace>/<path>`) 
+  - Example: `additional_attributes:innate_spell/irons_spellbooks/cloud_of_regeneration`
 
+## Other
 Added an attribute to potentially not use up a scroll
 - ID is `additional_attributes:keep_scroll`
 - Value between `0` (`0%` chance) and 1 (`100%` chance)
