@@ -86,9 +86,14 @@ public class AALanguageProvider extends LanguageProvider {
         String[] nameParts = elements[2].split("_");
         StringBuilder name = new StringBuilder();
 
-        for (String namePart : nameParts) {
+        for (int i = 0; i < nameParts.length; i++) {
+            String namePart = nameParts[i];
             // Convert the technical name (e.g. cloud_of_regeneration) to a more readable one (e.g. Cloud Of Regeneration)
             name.append(Character.toUpperCase(namePart.charAt(0))).append(namePart.substring(1));
+
+            if (i != nameParts.length - 1) {
+                name.append(" ");
+            }
         }
 
         if (isSchool) {

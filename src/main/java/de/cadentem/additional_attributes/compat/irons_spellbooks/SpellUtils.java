@@ -1,7 +1,6 @@
-package de.cadentem.additional_attributes.utils;
+package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
 import de.cadentem.additional_attributes.AA;
-import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import de.cadentem.additional_attributes.config.ServerConfig;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.resources.ResourceLocation;

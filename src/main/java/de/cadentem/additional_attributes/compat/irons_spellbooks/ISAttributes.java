@@ -10,20 +10,16 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.List;
-
 public class ISAttributes {
-    public static List<Attribute> INNATE_SCHOOLS;
-    public static List<Attribute> INNATE_SPELLS;
-
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.Keys.ATTRIBUTES, AA.MODID);
 
     public static final String SEPARATOR = "/";
-    public static final String DESCRIPTION_PREFIX = "attribute." + AA.MODID + ".";
     public static final String SPELL_PREFIX = "spell_type_";
     public static final String SCHOOL_PREFIX = "spell_school_";
     public static final String INNATE_SPELL_PREFIX = "innate_spell/";
+    public static final String INNATE_SPELL_DESCRIPTION_PREFIX = "attribute." + AA.MODID + "." + INNATE_SPELL_PREFIX;
     public static final String INNATE_SCHOOL_PREFIX = "innate_school/";
+    public static final String INNATE_SCHOOL_DESCRIPTION_PREFIX = "attribute." + AA.MODID + "." + INNATE_SCHOOL_PREFIX;
 
     public static final int LIMIT = 100;
 
@@ -43,20 +39,6 @@ public class ISAttributes {
     }
 
     public static ResourceLocation getLocation(final Attribute attribute, final String prefix) {
-        return ResourceLocation.tryParse(attribute.getDescriptionId().replace(ISAttributes.DESCRIPTION_PREFIX + prefix, "").replaceFirst(ISAttributes.SEPARATOR, ":"));
-    }
-
-    public static boolean areInnateListsMissing() {
-        return INNATE_SCHOOLS == null || INNATE_SPELLS == null;
-    }
-
-    public static void initInnateLists() {
-        ISAttributes.INNATE_SCHOOLS = ISAttributes.ATTRIBUTES.getEntries().stream()
-                .filter(attribute -> attribute.get().getDescriptionId().startsWith(ISAttributes.DESCRIPTION_PREFIX + ISAttributes.INNATE_SCHOOL_PREFIX))
-                .map(RegistryObject::get).toList();
-
-        ISAttributes.INNATE_SPELLS = ISAttributes.ATTRIBUTES.getEntries().stream()
-                .filter(attribute -> attribute.get().getDescriptionId().startsWith(ISAttributes.DESCRIPTION_PREFIX + ISAttributes.INNATE_SPELL_PREFIX))
-                .map(RegistryObject::get).toList();
+        return ResourceLocation.tryParse(attribute.getDescriptionId().replace(prefix, "").replaceFirst(ISAttributes.SEPARATOR, ":"));
     }
 }

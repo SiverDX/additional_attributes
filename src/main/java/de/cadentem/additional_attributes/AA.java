@@ -2,8 +2,8 @@ package de.cadentem.additional_attributes;
 
 import com.mojang.logging.LogUtils;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
+import de.cadentem.additional_attributes.compat.irons_spellbooks.ISEvents;
 import de.cadentem.additional_attributes.config.ServerConfig;
-import de.cadentem.additional_attributes.events.irons_spellbooks.ISEvents;
 import de.cadentem.additional_attributes.registry.AALootModifiers;
 import de.cadentem.additional_attributes.registry.AAttributes;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,8 +32,6 @@ public class AA {
             ISAttributes.ATTRIBUTES.register(modEventBus);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ISEvents::modifyLevel);
             MinecraftForge.EVENT_BUS.addListener(ISEvents::modifySpellSelection);
-            MinecraftForge.EVENT_BUS.addListener(ISEvents::initListsServer);
-            MinecraftForge.EVENT_BUS.addListener(ISEvents::initListsClient);
         }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);

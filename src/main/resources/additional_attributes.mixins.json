@@ -14,6 +14,7 @@
     "aquaculture.AquaFishingBobberEntityMixin",
     "aquaculture.AquaFishingRodItemMixin",
     "irons_spellbooks.AbstractSpellMixin",
+    "irons_spellbooks.AttributeMixin",
     "irons_spellbooks.MixinScroll",
     "irons_spellbooks.SchoolRegistryMixin",
     "irons_spellbooks.SpellRegistryMixin"

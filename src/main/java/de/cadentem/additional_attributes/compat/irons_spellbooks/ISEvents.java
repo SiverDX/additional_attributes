@@ -1,7 +1,5 @@
-package de.cadentem.additional_attributes.events.irons_spellbooks;
+package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
-import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
-import de.cadentem.additional_attributes.utils.SpellUtils;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -10,12 +8,9 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import it.unimi.dsi.fastutil.Pair;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,34 +23,28 @@ public class ISEvents {
     }
 
     public static void modifySpellSelection(final SpellSelectionManager.SpellSelectionEvent event) {
-        if (ISAttributes.areInnateListsMissing()) {
-            return;
-        }
-
         HashMap<AbstractSpell, Pair<Double, HashMap<AttributeModifier.Operation, Set<AttributeModifier>>>> spellModifiers = new HashMap<>();
 
-        for (Attribute attribute : ISAttributes.INNATE_SCHOOLS) {
+        ISAttributes.ATTRIBUTES.getEntries().stream().filter(attribute -> ((InnateAttribute) attribute.get()).additional_attributes$isInnateAttribute()).map(RegistryObject::get).forEach(attribute -> {
             AttributeInstance instance = event.getEntity().getAttribute(attribute);
 
-            if (instance != null) {
-                SchoolType school = SchoolRegistry.REGISTRY.get().getValue(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SCHOOL_PREFIX));
+            if (instance == null) {
+                return;
+            }
+
+            if (attribute.getDescriptionId().startsWith(ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX)) {
+                SchoolType school = SchoolRegistry.REGISTRY.get().getValue(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX));
 
                 for (AbstractSpell spell : SpellRegistry.REGISTRY.get().getValues()) {
                     if (spell.getSchoolType() == school) {
                         addModifiers(spellModifiers, instance, spell);
                     }
                 }
-            }
-        }
-
-        for (Attribute attribute : ISAttributes.INNATE_SPELLS) {
-            AttributeInstance instance = event.getEntity().getAttribute(attribute);
-
-            if (instance != null) {
-                AbstractSpell spell = SpellRegistry.REGISTRY.get().getValue(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SPELL_PREFIX));
+            } else if (attribute.getDescriptionId().startsWith(ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX)) {
+                AbstractSpell spell = SpellRegistry.REGISTRY.get().getValue(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX));
                 addModifiers(spellModifiers, instance, spell);
             }
-        }
+        });
 
         int index = 0;
 
@@ -99,16 +88,6 @@ public class ISEvents {
 
         for (AttributeModifier.Operation operation : AttributeModifier.Operation.values()) {
             data.right().computeIfAbsent(operation, key -> new HashSet<>()).addAll(instance.getModifiers(operation));
-        }
-    }
-
-    public static void initListsServer(final ServerStartedEvent ignored) {
-        ISAttributes.initInnateLists();
-    }
-
-    public static void initListsClient(final EntityJoinLevelEvent event) {
-        if (event.getEntity() instanceof Player && event.getLevel().isClientSide() && ISAttributes.areInnateListsMissing()) {
-            ISAttributes.initInnateLists();
         }
     }
 }
