@@ -2,6 +2,7 @@ package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
 import de.cadentem.additional_attributes.AA;
 import de.cadentem.additional_attributes.config.ServerConfig;
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -24,8 +25,19 @@ public class SpellUtils {
         }
 
         Attribute generalAttribute = ForgeRegistries.ATTRIBUTES.getValue(SPELL_GENERAL);
-        Attribute schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX + spell.getSchoolType().getId().getPath()));
-        Attribute spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX + spell.getSpellName()));
+        Attribute schoolAttribute;
+        Attribute spellAttribute;
+
+        ResourceLocation resource = spell.getSpellResource();
+
+        if (resource.getNamespace().equals(IronsSpellbooks.MODID)) {
+            // To keep compatibility with previous versions
+            schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX + spell.getSchoolType().getId().getPath()));
+            spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX + spell.getSpellName()));
+        } else {
+            schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath()));
+            spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath()));
+        }
 
         List<AttributeModifier> addition = new ArrayList<>();
         List<AttributeModifier> multiplyBase = new ArrayList<>();

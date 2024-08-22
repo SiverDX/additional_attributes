@@ -5,8 +5,20 @@ import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
 
 public class AALanguageProvider extends LanguageProvider {
+    private static final List<String> SKIP = List.of(
+      "fishing_lure",
+      "fishing_luck",
+      "looting",
+      "respiration",
+      "harvest",
+      "keep_scroll"
+    );
+
     public AALanguageProvider(final PackOutput output, final String locale) {
         super(output, AA.MODID, locale);
     }
@@ -29,12 +41,13 @@ public class AALanguageProvider extends LanguageProvider {
         add("attribute." + AA.MODID + ".keep_scroll", "Keep Scroll");
         add("attribute." + AA.MODID + ".keep_scroll.desc", "Chance to not use up a spell scroll");
 
-        ISAttributes.ATTRIBUTES.getEntries().forEach(attribute -> {
-            if (attribute == ISAttributes.KEEP_SCROLL) {
+        ForgeRegistries.ATTRIBUTES.getEntries().forEach(attribute -> {
+            ResourceLocation location = attribute.getKey().location();
+
+            if (!location.getNamespace().equals(AA.MODID) || SKIP.contains(location.getPath())) {
                 return;
             }
 
-            ResourceLocation location = attribute.getKey().location();
             String path = location.getPath();
             StringBuilder readable = new StringBuilder();
 
@@ -60,10 +73,10 @@ public class AALanguageProvider extends LanguageProvider {
                 if (i != split.length - 1) {
                     readable.append(" ");
                 } else {
-                    if (path.contains("spell_school")) {
+                    if (path.startsWith(ISAttributes.SCHOOL_PREFIX)) {
                         add("attribute." + location.toLanguageKey(), readable.append(" School Level").toString());
                         add("attribute." + location.toLanguageKey() + ".desc", "Modifies the level of all spells of this school");
-                    } else if (path.contains("spell_type")) {
+                    } else if (path.startsWith(ISAttributes.SPELL_PREFIX)) {
                         add("attribute." + location.toLanguageKey(), readable.append(" Spell Level").toString());
                         add("attribute." + location.toLanguageKey() + ".desc", "Modifies the level of this spell");
                     }

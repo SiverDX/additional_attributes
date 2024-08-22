@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Scroll.class)
-public abstract class MixinScroll {
+public abstract class ScrollMixin {
     /** Grants the chance to not consume the used scroll (skill) */
     @WrapOperation(method = "removeScrollAfterCast", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;isCreative()Z"))
     private boolean additional_attributes$isCreativeExtended(final ServerPlayer instance, final Operation<Boolean> original) {

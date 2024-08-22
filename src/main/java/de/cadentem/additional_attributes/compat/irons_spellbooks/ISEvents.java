@@ -1,5 +1,7 @@
 package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
+import de.cadentem.additional_attributes.config.ClientConfig;
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -8,14 +10,15 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import it.unimi.dsi.fastutil.Pair;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.RegisterEvent;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ISEvents {
     public static void modifyLevel(final ModifySpellLevelEvent event) {
@@ -25,7 +28,7 @@ public class ISEvents {
     public static void modifySpellSelection(final SpellSelectionManager.SpellSelectionEvent event) {
         HashMap<AbstractSpell, Pair<Double, HashMap<AttributeModifier.Operation, Set<AttributeModifier>>>> spellModifiers = new HashMap<>();
 
-        ISAttributes.ATTRIBUTES.getEntries().stream().filter(attribute -> ((InnateAttribute) attribute.get()).additional_attributes$isInnateAttribute()).map(RegistryObject::get).forEach(attribute -> {
+        ISAttributes.ATTRIBUTE_ENTRIES.forEach(attribute -> {
             AttributeInstance instance = event.getEntity().getAttribute(attribute);
 
             if (instance == null) {
@@ -71,8 +74,23 @@ public class ISEvents {
             int level = (int) result;
 
             if (level > 0) {
-                event.addSelectionOption(new SpellData(spell, level), "innate_spells", index);
-                index++;
+                boolean shouldAdd = true;
+
+                if (ClientConfig.SKIP_INNATE.get()) {
+                    List<SpellData> spellEntries = event.getManager().getAllSpells().stream().filter(option -> option.spellData.getSpell() == spell).map(option -> option.spellData).toList();
+
+                    for (SpellData entry : spellEntries) {
+                        if (entry.getLevel() >= level) {
+                            shouldAdd = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldAdd) {
+                    event.addSelectionOption(new SpellData(spell, level), "innate_spells", index);
+                    index++;
+                }
             }
         }
     }
@@ -88,6 +106,49 @@ public class ISEvents {
 
         for (AttributeModifier.Operation operation : AttributeModifier.Operation.values()) {
             data.right().computeIfAbsent(operation, key -> new HashSet<>()).addAll(instance.getModifiers(operation));
+        }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static void registerAttributes(final RegisterEvent event) {
+        if (event.getRegistryKey() == SpellRegistry.REGISTRY.get().getRegistryKey()) {
+            if (ForgeRegistries.ATTRIBUTES instanceof ForgeRegistry<Attribute> registry) {
+                registry.unfreeze();
+
+                SpellRegistry.REGISTRY.get().getValues().forEach(spell -> {
+                    ResourceLocation resource = spell.getSpellResource();
+
+                    if (resource.getNamespace().equals(IronsSpellbooks.MODID)) {
+                        // To keep compatibility with previous versions
+                        ISAttributes.registerAttribute(ISAttributes.SPELL_PREFIX + spell.getSpellName());
+                    } else {
+                        ISAttributes.registerAttribute(ISAttributes.SPELL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
+                    }
+
+                    ISAttributes.registerAttribute(ISAttributes.INNATE_SPELL_PREFIX + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
+                });
+
+                registry.freeze();
+            }
+        } else if (event.getRegistryKey() == SchoolRegistry.REGISTRY.get().getRegistryKey()) {
+            if (ForgeRegistries.ATTRIBUTES instanceof ForgeRegistry<Attribute> registry) {
+                registry.unfreeze();
+
+                SchoolRegistry.REGISTRY.get().getValues().forEach(school -> {
+                    ResourceLocation resource = school.getId();
+
+                    if (resource.getNamespace().equals(IronsSpellbooks.MODID)) {
+                        // To keep compatibility with previous versions
+                        ISAttributes.registerAttribute(ISAttributes.SCHOOL_PREFIX + resource.getPath());
+                    } else {
+                        ISAttributes.registerAttribute(ISAttributes.SCHOOL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
+                    }
+
+                    ISAttributes.registerAttribute(ISAttributes.INNATE_SCHOOL_PREFIX + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
+                });
+
+                registry.freeze();
+            }
         }
     }
 }

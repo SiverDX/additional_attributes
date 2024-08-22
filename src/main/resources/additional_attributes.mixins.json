@@ -13,11 +13,10 @@
     "LivingEntityMixin",
     "aquaculture.AquaFishingBobberEntityMixin",
     "aquaculture.AquaFishingRodItemMixin",
+    "irons_spellbooks.AbstractEldritchSpellMixin",
     "irons_spellbooks.AbstractSpellMixin",
     "irons_spellbooks.AttributeMixin",
-    "irons_spellbooks.MixinScroll",
-    "irons_spellbooks.SchoolRegistryMixin",
-    "irons_spellbooks.SpellRegistryMixin"
+    "irons_spellbooks.ScrollMixin"
   ],
   "client": [
     "irons_spellbooks.ClientPacketListenerMixin"
