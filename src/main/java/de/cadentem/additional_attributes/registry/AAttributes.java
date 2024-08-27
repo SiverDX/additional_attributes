@@ -1,6 +1,7 @@
 package de.cadentem.additional_attributes.registry;
 
 import de.cadentem.additional_attributes.AA;
+import de.cadentem.additional_attributes.datagen.AALanguageProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -26,7 +27,7 @@ public class AAttributes {
     public static final RegistryObject<Attribute> HARVEST_BONUS = createAttribute("harvest");
 
     public static RegistryObject<Attribute> createAttribute(final String id) {
-        return ATTRIBUTES.register(id, () -> new RangedAttribute("attribute." + AA.MODID + "." + id, 0, 0, MAX).setSyncable(true));
+        return ATTRIBUTES.register(id, () -> new RangedAttribute(AALanguageProvider.PREFIX + id, 0, 0, MAX).setSyncable(true));
     }
 
     @SubscribeEvent

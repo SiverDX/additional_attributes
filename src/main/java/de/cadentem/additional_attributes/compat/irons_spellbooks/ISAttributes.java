@@ -1,6 +1,7 @@
 package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
 import de.cadentem.additional_attributes.AA;
+import de.cadentem.additional_attributes.datagen.AALanguageProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -24,17 +25,14 @@ public class ISAttributes {
     public static final String SCHOOL_PREFIX = "spell_school_";
     public static final String SCHOOL_PREFIX_NEW = "school" + SEPARATOR;
     public static final String INNATE_SPELL_PREFIX = "innate_spell" + SEPARATOR;
-    public static final String INNATE_SPELL_DESCRIPTION_PREFIX = "attribute." + AA.MODID + "." + INNATE_SPELL_PREFIX;
+    public static final String INNATE_SPELL_DESCRIPTION_PREFIX = AALanguageProvider.PREFIX + INNATE_SPELL_PREFIX;
     public static final String INNATE_SCHOOL_PREFIX = "innate_school" + SEPARATOR;
-    public static final String INNATE_SCHOOL_DESCRIPTION_PREFIX = "attribute." + AA.MODID + "." + INNATE_SCHOOL_PREFIX;
+    public static final String INNATE_SCHOOL_DESCRIPTION_PREFIX = AALanguageProvider.PREFIX + INNATE_SCHOOL_PREFIX;
 
     public static final int LIMIT = 100;
 
-    public static RegistryObject<Attribute> KEEP_SCROLL = ATTRIBUTES.register("keep_scroll", () -> new RangedAttribute("attribute." + AA.MODID + ".keep_scroll", 0, 0, 1).setSyncable(true));
-
-    static {
-        createAttribute("spell_general");
-    }
+    public static RegistryObject<Attribute> KEEP_SCROLL = ATTRIBUTES.register("keep_scroll", () -> new RangedAttribute(AALanguageProvider.PREFIX + "keep_scroll", 0, 0, 1).setSyncable(true));
+    public static RegistryObject<Attribute> SPELL_GENERAL = ATTRIBUTES.register("spell_general", () -> new RangedAttribute(AALanguageProvider.PREFIX + "spell_general", 0, 0, LIMIT).setSyncable(true));
 
     public static @Nullable Attribute getInnateSpell(final ResourceLocation resource) {
         return ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryBuild(AA.MODID, INNATE_SPELL_PREFIX + resource.getNamespace() + SEPARATOR + resource.getPath()));
@@ -44,13 +42,8 @@ public class ISAttributes {
         return ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryBuild(AA.MODID, INNATE_SCHOOL_PREFIX + resource.getNamespace() + SEPARATOR + resource.getPath()));
     }
 
-    public static void createAttribute(final String id) {
-        ATTRIBUTES.register(id, () -> new RangedAttribute("attribute." + AA.MODID + "." + id, 0, 0, LIMIT).setSyncable(true));
-        AA.LOG.debug("Registered attribute [{}]", id);
-    }
-
     public static void registerAttribute(final String id) {
-        Attribute attribute = new RangedAttribute("attribute." + AA.MODID + "." + id, 0, 0, LIMIT).setSyncable(true);
+        Attribute attribute = new RangedAttribute(AALanguageProvider.PREFIX + id, 0, 0, LIMIT).setSyncable(true);
         ForgeRegistries.ATTRIBUTES.register(id, attribute);
         ATTRIBUTE_ENTRIES.add(attribute);
         AA.LOG.debug("Registered attribute [{}]", id);
@@ -58,7 +51,7 @@ public class ISAttributes {
 
     public static void setAttributes(final EntityAttributeModificationEvent event) {
         ATTRIBUTES.getEntries().forEach(attribute -> {
-            if (attribute.getId().getPath().equals("spell_general")) {
+            if (attribute == SPELL_GENERAL) {
                 event.getTypes().forEach(type -> event.add(type, attribute.get()));
             } else {
                 event.add(EntityType.PLAYER, attribute.get());
@@ -67,11 +60,10 @@ public class ISAttributes {
 
         for (Attribute attribute : ATTRIBUTE_ENTRIES) {
             // These attributes were not registered through the deferred registry
-            String id = attribute.getDescriptionId().replace("attribute." + AA.MODID + ".", "");
+            String id = attribute.getDescriptionId().replace(AALanguageProvider.PREFIX, "");
 
             if (id.startsWith(SCHOOL_PREFIX) || id.startsWith(SCHOOL_PREFIX_NEW) || id.startsWith(SPELL_PREFIX) || id.startsWith(SPELL_PREFIX_NEW)) {
                 event.getTypes().forEach(type -> event.add(type, attribute));
-                System.out.println(id);
             } else {
                 event.add(EntityType.PLAYER, attribute);
             }

@@ -17,33 +17,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpellUtils {
-    private static final ResourceLocation SPELL_GENERAL = new ResourceLocation(AA.MODID, "spell_general");
-
     public static int calculateSpellLevel(@Nullable final LivingEntity livingEntity, final AbstractSpell spell, int originalLevel) {
         if (livingEntity == null) {
             return originalLevel;
         }
 
-        Attribute generalAttribute = ForgeRegistries.ATTRIBUTES.getValue(SPELL_GENERAL);
         Attribute schoolAttribute;
         Attribute spellAttribute;
 
-        ResourceLocation resource = spell.getSpellResource();
+        ResourceLocation spellResource = spell.getSpellResource();
+        ResourceLocation schoolResource = spell.getSchoolType().getId();
 
-        if (resource.getNamespace().equals(IronsSpellbooks.MODID)) {
+        if (spellResource.getNamespace().equals(IronsSpellbooks.MODID)) {
             // To keep compatibility with previous versions
-            schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX + spell.getSchoolType().getId().getPath()));
+            schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX + schoolResource.getPath()));
             spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX + spell.getSpellName()));
         } else {
-            schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath()));
-            spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath()));
+            schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX_NEW + schoolResource.getNamespace() + ISAttributes.SEPARATOR + schoolResource.getPath()));
+            spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX_NEW + spellResource.getNamespace() + ISAttributes.SEPARATOR + spellResource.getPath()));
         }
 
         List<AttributeModifier> addition = new ArrayList<>();
         List<AttributeModifier> multiplyBase = new ArrayList<>();
         List<AttributeModifier> multiplyTotal = new ArrayList<>();
 
-        fillModifiers(livingEntity, generalAttribute, addition, multiplyBase, multiplyTotal);
+        fillModifiers(livingEntity, ISAttributes.SPELL_GENERAL.get(), addition, multiplyBase, multiplyTotal);
         fillModifiers(livingEntity, schoolAttribute, addition, multiplyBase, multiplyTotal);
         fillModifiers(livingEntity, spellAttribute, addition, multiplyBase, multiplyTotal);
 
