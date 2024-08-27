@@ -1,6 +1,5 @@
 # Enchantment Attributes
 - Looting (`additional_attributes:looting`)
-- Respiration (`additional_attributes:respiration`)
 - Fishing Lure (`additional_attributes:fishing_lure`)
 - Fishing Luck (`additional_attributes:fishing_lure`)
 

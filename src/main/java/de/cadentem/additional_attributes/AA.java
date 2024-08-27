@@ -7,14 +7,13 @@ import de.cadentem.additional_attributes.config.ClientConfig;
 import de.cadentem.additional_attributes.config.ServerConfig;
 import de.cadentem.additional_attributes.registry.AALootModifiers;
 import de.cadentem.additional_attributes.registry.AAttributes;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
 @Mod(AA.MODID)
@@ -22,21 +21,19 @@ public class AA {
     public static final String MODID = "additional_attributes";
     public static final Logger LOG = LogUtils.getLogger();
 
-    public AA() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        AALootModifiers.LOOT_MODIFIERS.register(modEventBus);
-        AAttributes.ATTRIBUTES.register(modEventBus);
+    public AA(final IEventBus bus, final ModContainer container) {
+        AALootModifiers.LOOT_MODIFIERS.register(bus);
+        AAttributes.ATTRIBUTES.register(bus);
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
-            modEventBus.addListener(EventPriority.LOWEST, ISEvents::registerAttributes);
-            modEventBus.addListener(ISAttributes::setAttributes);
-            ISAttributes.ATTRIBUTES.register(modEventBus);
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ISEvents::modifyLevel);
-            MinecraftForge.EVENT_BUS.addListener(ISEvents::modifySpellSelection);
+            bus.addListener(EventPriority.LOWEST, ISEvents::registerAttributes);
+            bus.addListener(ISAttributes::setAttributes);
+            ISAttributes.ATTRIBUTES.register(bus);
+            NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, ISEvents::modifyLevel);
+            NeoForge.EVENT_BUS.addListener(ISEvents::modifySpellSelection);
         }
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 }

@@ -2,6 +2,7 @@ package de.cadentem.additional_attributes.mixin.irons_spellbooks;
 
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.InnateAttribute;
+import de.cadentem.additional_attributes.datagen.AALanguageProvider;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +19,7 @@ public abstract class AttributeMixin implements InnateAttribute {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void additional_attributes$setInnateFlag(final CallbackInfo callback) {
-        if (descriptionId.startsWith(ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX) || descriptionId.startsWith(ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX)) {
+        if (descriptionId.startsWith(AALanguageProvider.PREFIX + ISAttributes.INNATE_SCHOOL_PREFIX) || descriptionId.startsWith(AALanguageProvider.PREFIX + ISAttributes.INNATE_SPELL_PREFIX)) {
             additional_attributes$isInnateAttribute = true;
         }
     }

@@ -28,24 +28,23 @@ public class ISEvents {
     public static void modifySpellSelection(final SpellSelectionManager.SpellSelectionEvent event) {
         HashMap<AbstractSpell, Pair<Double, HashMap<AttributeModifier.Operation, Set<AttributeModifier>>>> spellModifiers = new HashMap<>();
 
-        ISAttributes.INNATE_ATTRIBUTES.forEach(attribute -> {
+        ISAttributes.ATTRIBUTE_ENTRIES.forEach(attribute -> {
             AttributeInstance instance = event.getEntity().getAttribute(attribute);
 
             if (instance == null) {
                 return;
             }
 
-            // FIXME 1.21 :: does name still match?
-            if (attribute.getRegisteredName().startsWith(ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX)) {
-                SchoolType school = SchoolRegistry.REGISTRY.get(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX));
+            if (attribute.getRegisteredName().startsWith(ISAttributes.INNATE_SCHOOL_NAME_PREFIX)) {
+                SchoolType school = SchoolRegistry.REGISTRY.get(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SCHOOL_NAME_PREFIX));
 
                 for (Map.Entry<ResourceKey<AbstractSpell>, AbstractSpell> spell : SpellRegistry.REGISTRY.entrySet()) {
                     if (spell.getValue().getSchoolType() == school) {
                         addModifiers(spellModifiers, instance, spell.getValue());
                     }
                 }
-            } else if (/* FIXME 1.21 :: does name still match? */ attribute.getRegisteredName().startsWith(ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX)) {
-                AbstractSpell spell = SpellRegistry.REGISTRY.get(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX));
+            } else if (attribute.getRegisteredName().startsWith(ISAttributes.INNATE_SPELL_NAME_PREFIX)) {
+                AbstractSpell spell = SpellRegistry.REGISTRY.get(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SPELL_NAME_PREFIX));
                 addModifiers(spellModifiers, instance, spell);
             }
         });
@@ -105,9 +104,8 @@ public class ISEvents {
             return Pair.of(value.left() + instance.getBaseValue(), value.right());
         });
 
-        for (AttributeModifier.Operation operation : AttributeModifier.Operation.values()) {
-            // FIXME :: accessor
-            data.right().computeIfAbsent(operation, key -> new HashSet<>()).addAll(instance.getModifiers(operation));
+        for (AttributeModifier modifier : instance.getModifiers()) {
+            data.right().computeIfAbsent(modifier.operation(), key -> new HashSet<>()).add(modifier);
         }
     }
 

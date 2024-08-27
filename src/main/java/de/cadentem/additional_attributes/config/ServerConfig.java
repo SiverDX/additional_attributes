@@ -1,10 +1,8 @@
 package de.cadentem.additional_attributes.config;
 
 
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class ServerConfig {
     public static ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static ModConfigSpec SPEC;

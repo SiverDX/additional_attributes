@@ -20,7 +20,7 @@ public class ApplyMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(final String targetClassName, final String mixinClassName) {
         if (mixinClassName.equals(PREFIX + "FishingHookMixin")) {
-            return LoadingModList.get().getModFileById("apotheosis") == null; // FIXME 1.21 :: namespace for 1.21 = ?
+            return LoadingModList.get().getModFileById("apotheosis") == null;
         }
 
         String directory = mixinClassName.replace(PREFIX, "");

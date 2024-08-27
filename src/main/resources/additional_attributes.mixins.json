@@ -6,14 +6,11 @@
   "plugin": "de.cadentem.additional_attributes.mixin.ApplyMixinPlugin",
   "refmap": "additional_attributes.refmap.json",
   "mixins": [
+    "EnchantmentHelperMixin",
     "EntityAccess",
     "FishingHookAccess",
     "FishingHookMixin",
-    "FishingRodMixin",
-    "LivingEntityMixin",
     "aquaculture.AquaFishingBobberEntityMixin",
-    "aquaculture.AquaFishingRodItemMixin",
-    "irons_spellbooks.AbstractEldritchSpellMixin",
     "irons_spellbooks.AbstractSpellMixin",
     "irons_spellbooks.AttributeMixin",
     "irons_spellbooks.ScrollMixin"

@@ -2,21 +2,24 @@ package de.cadentem.additional_attributes.datagen;
 
 import de.cadentem.additional_attributes.AA;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.List;
 
 public class AALanguageProvider extends LanguageProvider {
+    public static final String PREFIX = "attribute." + AA.MODID + ".";
+
     private static final List<String> SKIP = List.of(
-      "fishing_lure",
-      "fishing_luck",
-      "looting",
-      "respiration",
-      "harvest",
-      "keep_scroll"
+            "fishing_lure",
+            "fishing_luck",
+            "looting",
+            "respiration",
+            "harvest",
+            "keep_scroll",
+            "spell_general"
     );
 
     public AALanguageProvider(final PackOutput output, final String locale) {
@@ -27,21 +30,23 @@ public class AALanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         add("ui." + AA.MODID + ".cast_error_no_spell_level", "You do not possess the knowledge required to cast this spell");
 
-        add("attribute." + AA.MODID + ".fishing_lure", "Fishing Lure");
-        add("attribute." + AA.MODID + ".fishing_lure.desc", "Modifies the fishing lure level of the player");
-        add("attribute." + AA.MODID + ".fishing_luck", "Fishing Luck");
-        add("attribute." + AA.MODID + ".fishing_luck.desc", "Modifies the fishing luck level of the player");
-        add("attribute." + AA.MODID + ".looting", "Looting");
-        add("attribute." + AA.MODID + ".looting.desc", "Modifies the looting level of the player");
-        add("attribute." + AA.MODID + ".respiration", "Respiration");
-        add("attribute." + AA.MODID + ".respiration.desc", "Modifies the respiration level of the player");
-        add("attribute." + AA.MODID + ".harvest", "Harvesting");
-        add("attribute." + AA.MODID + ".harvest.desc", "Modifies the amount of harvested crops");
+        add(PREFIX + "fishing_lure", "Fishing Lure");
+        add(PREFIX + "fishing_lure.desc", "Modifies the fishing lure level of the player");
+        add(PREFIX + "fishing_luck", "Fishing Luck");
+        add(PREFIX + "fishing_luck.desc", "Modifies the fishing luck level of the player");
+        add(PREFIX + "looting", "Looting");
+        add(PREFIX + "looting.desc", "Modifies the looting level of the player");
+        add(PREFIX + "respiration", "Respiration");
+        add(PREFIX + "respiration.desc", "Modifies the respiration level of the player");
+        add(PREFIX + "harvest", "Harvesting");
+        add(PREFIX + "harvest.desc", "Modifies the amount of harvested crops");
 
-        add("attribute." + AA.MODID + ".keep_scroll", "Keep Scroll");
-        add("attribute." + AA.MODID + ".keep_scroll.desc", "Chance to not use up a spell scroll");
+        add(PREFIX + "keep_scroll", "Keep Scroll");
+        add(PREFIX + "keep_scroll.desc", "Chance to not use up a spell scroll");
+        add(PREFIX + "spell_general", "General Spell Level");
+        add(PREFIX + "spell_general.desc", "Modifies the level of all spells");
 
-        ForgeRegistries.ATTRIBUTES.getEntries().forEach(attribute -> {
+        BuiltInRegistries.ATTRIBUTE.entrySet().forEach(attribute -> {
             ResourceLocation location = attribute.getKey().location();
 
             if (!location.getNamespace().equals(AA.MODID) || SKIP.contains(location.getPath())) {
@@ -50,14 +55,6 @@ public class AALanguageProvider extends LanguageProvider {
 
             String path = location.getPath();
             StringBuilder readable = new StringBuilder();
-
-            if (path.contains("spell_general")) {
-                readable.append("General Spell Level");
-                add("attribute." + location.toLanguageKey(), readable.toString());
-                add("attribute." + location.toLanguageKey() + ".desc", "Modifies the level of all spells");
-
-                return;
-            }
 
             if (handleInnateAttribute(location)) {
                 return;

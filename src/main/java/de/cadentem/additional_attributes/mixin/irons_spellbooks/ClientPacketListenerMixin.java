@@ -22,7 +22,7 @@ public abstract class ClientPacketListenerMixin {
             return;
         }
 
-        if (((InnateAttribute) instance.getAttribute()).additional_attributes$isInnateAttribute()) {
+        if (((InnateAttribute) instance.getAttribute().value()).additional_attributes$isInnateAttribute()) {
             shouldSync.set(true);
         }
     }

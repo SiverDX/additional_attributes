@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = AbstractSpell.class, remap = false)
 public abstract class AbstractSpellMixin {
     @Shadow public abstract SchoolType getSchoolType();
-
     @Shadow public abstract ResourceLocation getSpellResource();
 
     @Unique private static final CastResult additional_attributes$NO_SPELL_LEVEL_FAILURE = new CastResult(CastResult.Type.FAILURE, Component.translatable("ui.additional_attributes.cast_error_no_spell_level"));
