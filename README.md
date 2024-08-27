@@ -17,8 +17,13 @@ Can be used to increase the amount of harvested items
 # Iron's Spells 'n Spellbooks
 ## Increase or decrease spell levels
 - General attribute (meaning all spells) (`additional_attributes:spell_general`)
-- Attribute for each school type (`additional_attributes:spell_school_<...>`) (e.g. `additional_attributes:spell_school_fire`)
-- Attribute for each spell type (`additional_attributes:spell_type_<...>`) (e.g. `additional_attributes:spell_type_shockwave`)
+- Attribute for each school type (`additional_attributes:spell_school_<...>`)
+  - Example: `additional_attributes:spell_school_fire`
+  - Third-party schools have the syntax `additional_attributes:school/<namespace>/<path>`
+- Attribute for each spell type (`additional_attributes:spell_type_<...>`)
+  - Example: `additional_attributes:spell_type_shockwave`
+  - Third-party spells have the syntax `additional_attributes:spell/<namespace>/<path>`
+    - Example: `additional_attributes:spell/traveloptics/orbital_void`
 
 How it works:
 - The base value of these attributes is the level of the spell being used - meaning `modify_base` will always have an effect
@@ -26,6 +31,7 @@ How it works:
 - The three attribute types function as one - their modifiers are gathered together before calculation
 - There is no rounding - meaning a spell level of `1.75` will result in `1`
 - If the spell level reaches 0 (due to negative modifiers) the spell cannot be cast
+- These attributes are present for all entities not just the player
 
 ## Add spells to the spell selection
 These spells will be available independent of the current spellbook, weapon, etc.
