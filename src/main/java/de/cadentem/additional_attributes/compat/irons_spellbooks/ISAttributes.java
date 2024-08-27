@@ -57,10 +57,24 @@ public class ISAttributes {
     }
 
     public static void setAttributes(final EntityAttributeModificationEvent event) {
-        ATTRIBUTES.getEntries().forEach(attribute -> event.add(EntityType.PLAYER, attribute.get()));
+        ATTRIBUTES.getEntries().forEach(attribute -> {
+            if (attribute.getId().getPath().equals("spell_general")) {
+                event.getTypes().forEach(type -> event.add(type, attribute.get()));
+            } else {
+                event.add(EntityType.PLAYER, attribute.get());
+            }
+        });
 
         for (Attribute attribute : ATTRIBUTE_ENTRIES) {
-            event.add(EntityType.PLAYER, attribute);
+            // These attributes were not registered through the deferred registry
+            String id = attribute.getDescriptionId().replace("attribute." + AA.MODID + ".", "");
+
+            if (id.startsWith(SCHOOL_PREFIX) || id.startsWith(SCHOOL_PREFIX_NEW) || id.startsWith(SPELL_PREFIX) || id.startsWith(SPELL_PREFIX_NEW)) {
+                event.getTypes().forEach(type -> event.add(type, attribute));
+                System.out.println(id);
+            } else {
+                event.add(EntityType.PLAYER, attribute);
+            }
         }
 
         // Only need to keep the innate attributes to update the spell selection

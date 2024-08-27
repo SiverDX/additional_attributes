@@ -19,13 +19,13 @@ public class ApplyMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(final String targetClassName, final String mixinClassName) {
-        if (mixinClassName.equals(PREFIX + "MixinFishingHook")) {
+        if (mixinClassName.equals(PREFIX + "FishingHookMixin")) {
             return LoadingModList.get().getModFileById("apotheosis") == null;
         }
 
-        String modid = mixinClassName.replace(PREFIX, "");
-        modid = modid.replace("client.", "");
-        String[] elements = modid.split("\\.");
+        String directory = mixinClassName.replace(PREFIX, "");
+        directory = directory.replace("client.", "");
+        String[] elements = directory.split("\\.");
 
         if (elements.length == 2) {
             return LoadingModList.get().getModFileById(elements[0]) != null;
