@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin {
+public abstract class LivingEntityMixin { // FIXME :: use event?
     @ModifyVariable(method = "decreaseAirSupply", at = @At(value = "STORE"), ordinal = 1)
     private int additional_attributes$amplifyValue(int original) {
         LivingEntity instance = (LivingEntity) (Object) this;

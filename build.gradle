@@ -1,141 +1,102 @@
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
 }
 
 version = minecraft_version + "-" + mod_version
+group = mod_group_id
+
+repositories {
+    mavenLocal()
+    flatDir { dirs 'dev' }
+    maven { url = "https://jitpack.io" } // Mixin Squared
+    maven { url = "https://www.cursemaven.com" } // CurseForge
+}
 
 base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
+    }
 
-//    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-    runs {
-        configureEach {
-            workingDirectory project.file("run/${it.name}")
-            property 'forge.logging.markers', 'SCAN' /* REGISTRIES / REGISTRYDUMP */
-            property 'forge.logging.console.level', 'debug'
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
 
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-        client {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            // Support for mixins of other mods
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-        }
-
-        clientRandom {
-            parent runs.client
-            // #### will be replaced with a random number | UUID is a randomly generated one
-            args '--username', 'Dev####', '--uuid', 'fdb0e318-1ac3-4049-b6f8-d024c0b87a56'
-        }
-
-        server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            // Support for mixins of other mods
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-        }
-
-        data {
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
+    data {
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-    flatDir { dirs 'dev' }
-    maven { url = "https://jitpack.io" } // Mixin Squared
-    maven { url = "https://www.cursemaven.com" } // CurseForge
-    maven { url = "https://maven.blamejared.com/" } // JEI
-    maven { url = "https://maven.theillusivec4.top/" } // Curios
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
+    implementation "net.neoforged:neoforge:${neo_version}"
 
-    /* --- Other --- */
-    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5616394") // 1.20.1 - 3.1.7.1
-    /* irons_spellbooks */ implementation fg.deobf("curse.maven:playeranimator-658587:4587214") // 1.20.1 - 1.0.2
-    /* irons_spellbooks */ implementation fg.deobf("curse.maven:caelus-308989:4581481") // 1.20.1 - 3.1.0
-    /* irons_spellbooks */ implementation fg.deobf("curse.maven:geckolib-388172:5021668") // 1.20.1 - 4.4
-    /* irons_spellbooks */ compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}:api"))
-    /* irons_spellbooks */ runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}"))
+    /* --- Compatibility --- */
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:5659880" // 3.4.5
+    implementation "curse.maven:caelus-308989:5442975" // 7.0.0
+    implementation "curse.maven:geckolib-388172:5664570" // 4.6.2
 
-    /* --- For Mixin --- */
-    implementation fg.deobf("curse.maven:aquaculture-60028:4921323") // 1.20.1 - 2.5.1
-
-    /* --- Mixin Configuration --- */
-//    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:${mixin_squared_version}"))
-//    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:${mixin_squared_version}")) {
-//        jarJar.ranged(it, "[${mixin_squared_version},)")
-//    }
-
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {
-        jarJar.ranged(it, "[${mixin_extras_version},)")
-    }
-
-    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-}
-
-mixin {
-    config "${mod_id}.mixins.json"
-    add sourceSets.main, "${mod_id}.refmap.json"
+    implementation "curse.maven:aquaculture-60028:5624185" // 2.7.9
 }
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            minecraft_version: minecraft_version,
-            mod_id           : mod_id,
-            mod_name         : mod_name,
-            mod_license      : mod_license,
-            mod_version      : mod_version,
-            mod_author       : mod_author,
-            mod_description  : mod_description
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
     ]
 
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
     }
-}
-
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                'Specification-Title'     : mod_id,
-                'Specification-Vendor'    : mod_author,
-                'Specification-Version'   : '1',
-                'Implementation-Title'    : project.name,
-                'Implementation-Version'  : mod_version,
-                'Implementation-Vendor'   : mod_author,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-
-    finalizedBy 'reobfJar'
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

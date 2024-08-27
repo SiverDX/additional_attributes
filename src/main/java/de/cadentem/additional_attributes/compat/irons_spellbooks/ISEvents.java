@@ -1,7 +1,6 @@
 package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
 import de.cadentem.additional_attributes.config.ClientConfig;
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -10,13 +9,14 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import it.unimi.dsi.fastutil.Pair;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.*;
 
@@ -28,23 +28,24 @@ public class ISEvents {
     public static void modifySpellSelection(final SpellSelectionManager.SpellSelectionEvent event) {
         HashMap<AbstractSpell, Pair<Double, HashMap<AttributeModifier.Operation, Set<AttributeModifier>>>> spellModifiers = new HashMap<>();
 
-        ISAttributes.ATTRIBUTE_ENTRIES.forEach(attribute -> {
+        ISAttributes.INNATE_ATTRIBUTES.forEach(attribute -> {
             AttributeInstance instance = event.getEntity().getAttribute(attribute);
 
             if (instance == null) {
                 return;
             }
 
-            if (attribute.getDescriptionId().startsWith(ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX)) {
-                SchoolType school = SchoolRegistry.REGISTRY.get().getValue(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX));
+            // FIXME 1.21 :: does name still match?
+            if (attribute.getRegisteredName().startsWith(ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX)) {
+                SchoolType school = SchoolRegistry.REGISTRY.get(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SCHOOL_DESCRIPTION_PREFIX));
 
-                for (AbstractSpell spell : SpellRegistry.REGISTRY.get().getValues()) {
-                    if (spell.getSchoolType() == school) {
-                        addModifiers(spellModifiers, instance, spell);
+                for (Map.Entry<ResourceKey<AbstractSpell>, AbstractSpell> spell : SpellRegistry.REGISTRY.entrySet()) {
+                    if (spell.getValue().getSchoolType() == school) {
+                        addModifiers(spellModifiers, instance, spell.getValue());
                     }
                 }
-            } else if (attribute.getDescriptionId().startsWith(ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX)) {
-                AbstractSpell spell = SpellRegistry.REGISTRY.get().getValue(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX));
+            } else if (/* FIXME 1.21 :: does name still match? */ attribute.getRegisteredName().startsWith(ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX)) {
+                AbstractSpell spell = SpellRegistry.REGISTRY.get(ISAttributes.getLocation(attribute, ISAttributes.INNATE_SPELL_DESCRIPTION_PREFIX));
                 addModifiers(spellModifiers, instance, spell);
             }
         });
@@ -57,18 +58,18 @@ public class ISEvents {
 
             double base = data.left();
 
-            for (AttributeModifier modifier : modifiers.getOrDefault(AttributeModifier.Operation.ADDITION, Collections.emptySet())) {
-                base += modifier.getAmount();
+            for (AttributeModifier modifier : modifiers.getOrDefault(AttributeModifier.Operation.ADD_VALUE, Collections.emptySet())) {
+                base += modifier.amount();
             }
 
             double result = base;
 
-            for (AttributeModifier modifier : modifiers.getOrDefault(AttributeModifier.Operation.MULTIPLY_BASE, Collections.emptySet())) {
-                result += base * modifier.getAmount();
+            for (AttributeModifier modifier : modifiers.getOrDefault(AttributeModifier.Operation.ADD_MULTIPLIED_BASE, Collections.emptySet())) {
+                result += base * modifier.amount();
             }
 
-            for (AttributeModifier modifier : modifiers.getOrDefault(AttributeModifier.Operation.MULTIPLY_TOTAL, Collections.emptySet())) {
-                result *= 1 + modifier.getAmount();
+            for (AttributeModifier modifier : modifiers.getOrDefault(AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, Collections.emptySet())) {
+                result *= 1 + modifier.amount();
             }
 
             int level = (int) result;
@@ -105,45 +106,31 @@ public class ISEvents {
         });
 
         for (AttributeModifier.Operation operation : AttributeModifier.Operation.values()) {
+            // FIXME :: accessor
             data.right().computeIfAbsent(operation, key -> new HashSet<>()).addAll(instance.getModifiers(operation));
         }
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     public static void registerAttributes(final RegisterEvent event) {
-        if (event.getRegistryKey() == SpellRegistry.REGISTRY.get().getRegistryKey()) {
-            if (ForgeRegistries.ATTRIBUTES instanceof ForgeRegistry<Attribute> registry) {
+        if (event.getRegistryKey() == SpellRegistry.REGISTRY.key()) {
+            if (BuiltInRegistries.ATTRIBUTE instanceof MappedRegistry<Attribute> registry) {
                 registry.unfreeze();
 
-                SpellRegistry.REGISTRY.get().getValues().forEach(spell -> {
-                    ResourceLocation resource = spell.getSpellResource();
-
-                    if (resource.getNamespace().equals(IronsSpellbooks.MODID)) {
-                        // To keep compatibility with previous versions
-                        ISAttributes.registerAttribute(ISAttributes.SPELL_PREFIX + spell.getSpellName());
-                    } else {
-                        ISAttributes.registerAttribute(ISAttributes.SPELL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
-                    }
-
+                SpellRegistry.REGISTRY.entrySet().forEach(spell -> {
+                    ResourceLocation resource = spell.getKey().location();
+                    ISAttributes.registerAttribute(ISAttributes.SPELL_PREFIX + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
                     ISAttributes.registerAttribute(ISAttributes.INNATE_SPELL_PREFIX + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
                 });
 
                 registry.freeze();
             }
-        } else if (event.getRegistryKey() == SchoolRegistry.REGISTRY.get().getRegistryKey()) {
-            if (ForgeRegistries.ATTRIBUTES instanceof ForgeRegistry<Attribute> registry) {
+        } else if (event.getRegistryKey() == SchoolRegistry.REGISTRY.key()) {
+            if (BuiltInRegistries.ATTRIBUTE instanceof MappedRegistry<Attribute> registry) {
                 registry.unfreeze();
 
-                SchoolRegistry.REGISTRY.get().getValues().forEach(school -> {
-                    ResourceLocation resource = school.getId();
-
-                    if (resource.getNamespace().equals(IronsSpellbooks.MODID)) {
-                        // To keep compatibility with previous versions
-                        ISAttributes.registerAttribute(ISAttributes.SCHOOL_PREFIX + resource.getPath());
-                    } else {
-                        ISAttributes.registerAttribute(ISAttributes.SCHOOL_PREFIX_NEW + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
-                    }
-
+                SchoolRegistry.REGISTRY.entrySet().forEach(school -> {
+                    ResourceLocation resource = school.getKey().location();
+                    ISAttributes.registerAttribute(ISAttributes.SCHOOL_PREFIX + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
                     ISAttributes.registerAttribute(ISAttributes.INNATE_SCHOOL_PREFIX + resource.getNamespace() + ISAttributes.SEPARATOR + resource.getPath());
                 });
 

@@ -1,6 +1,6 @@
 package de.cadentem.additional_attributes.mixin;
 
-import net.minecraftforge.fml.loading.LoadingModList;
+import net.neoforged.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -19,13 +19,13 @@ public class ApplyMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(final String targetClassName, final String mixinClassName) {
-        if (mixinClassName.equals(PREFIX + "MixinFishingHook")) {
-            return LoadingModList.get().getModFileById("apotheosis") == null;
+        if (mixinClassName.equals(PREFIX + "FishingHookMixin")) {
+            return LoadingModList.get().getModFileById("apotheosis") == null; // FIXME 1.21 :: namespace for 1.21 = ?
         }
 
-        String modid = mixinClassName.replace(PREFIX, "");
-        modid = modid.replace("client.", "");
-        String[] elements = modid.split("\\.");
+        String directory = mixinClassName.replace(PREFIX, "");
+        directory = directory.replace("client.", "");
+        String[] elements = directory.split("\\.");
 
         if (elements.length == 2) {
             return LoadingModList.get().getModFileById(elements[0]) != null;

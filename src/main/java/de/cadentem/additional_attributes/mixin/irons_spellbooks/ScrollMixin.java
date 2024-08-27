@@ -18,7 +18,7 @@ public abstract class ScrollMixin {
             return true;
         }
 
-        AttributeInstance attributeInstance = instance.getAttribute(ISAttributes.KEEP_SCROLL.get());
+        AttributeInstance attributeInstance = instance.getAttribute(ISAttributes.KEEP_SCROLL);
         return attributeInstance != null && instance.getRandom().nextFloat() < attributeInstance.getValue();
     }
 }
