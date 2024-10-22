@@ -61,12 +61,13 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     /* --- Compatibility --- */
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:5659880" // 3.4.5
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:5834785" // 3.8.2
     implementation "curse.maven:caelus-308989:5442975" // 7.0.0
     implementation "curse.maven:geckolib-388172:5664570" // 4.6.2
     implementation "curse.maven:adorned-1036809:5652826" // 9.1.2
+    implementation "curse.maven:playeranimator-658587:5698755" // 2.0.0
 
-    implementation "curse.maven:aquaculture-60028:5624185" // 2.7.9
+    implementation "curse.maven:aquaculture-60028:5713551" // 2.7.10
 }
 
 tasks.withType(ProcessResources).configureEach {
