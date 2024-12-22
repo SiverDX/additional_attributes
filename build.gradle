@@ -61,7 +61,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     /* --- Compatibility --- */
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:5834785" // 3.8.2
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:5983204" // 3.8.6
     implementation "curse.maven:caelus-308989:5442975" // 7.0.0
     implementation "curse.maven:geckolib-388172:5664570" // 4.6.2
     implementation "curse.maven:adorned-1036809:5652826" // 9.1.2
