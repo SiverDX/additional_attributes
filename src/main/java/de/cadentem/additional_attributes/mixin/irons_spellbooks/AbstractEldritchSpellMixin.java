@@ -7,15 +7,20 @@ import de.cadentem.additional_attributes.config.ServerConfig;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.spells.eldritch.AbstractEldritchSpell;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 /** Innate spells unlock the usage of eldritch spells (if enabled through the config) */
 @Mixin(value = AbstractEldritchSpell.class, remap = false)
 public abstract class AbstractEldritchSpellMixin extends AbstractSpell {
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings("ConstantConditions") // attributes are present
     @ModifyReturnValue(method = "isLearned", at = @At("RETURN"))
-    private boolean additional_attributes$innateUnlocksEldritch(boolean isLearned, @Local(argsOnly = true) final Player player) {
+    private boolean additional_attributes$innateUnlocksEldritch(boolean isLearned, @Local(argsOnly = true) @Nullable final Player player) {
+        if (player == null) {
+            return isLearned;
+        }
+
         if (!isLearned && ServerConfig.INNATE_UNLOCKS_ELDRITCH.get()) {
             if (player.getAttribute(ISAttributes.getInnateSchool(getSchoolType().getId())).getValue() > 0) {
                 return true;
