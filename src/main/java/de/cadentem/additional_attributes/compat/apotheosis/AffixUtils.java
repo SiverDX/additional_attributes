@@ -47,6 +47,13 @@ public class AffixUtils {
             max = RarityRegistry.next(max);
         }
 
+        int shift = 0;
+
+        while (shift < ServerConfig.SHIFT_MIN_RARITY.get()) {
+            min = RarityRegistry.prev(min);
+            shift++;
+        }
+
         LootRarity rarity = LootRarity.random(player.getRandom(), player.getLuck(), new RarityClamp.Simple(min, max));
         LootController.createLootItem(stack, rarity, player.getRandom());
     }

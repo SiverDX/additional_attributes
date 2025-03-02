@@ -12,6 +12,7 @@ public class ServerConfig {
     public static ForgeConfigSpec.BooleanValue INNATE_UNLOCKS_ELDRITCH;
 
     public static ForgeConfigSpec.IntValue MAX_RARITY;
+    public static ForgeConfigSpec.IntValue SHIFT_MIN_RARITY;
 
     static {
         BUILDER.push("Iron's Spells 'n Spellbooks");
@@ -21,6 +22,10 @@ public class ServerConfig {
 
         BUILDER.push("Apotheosis");
         MAX_RARITY = BUILDER.comment("Max. rarity that can be crafted (6 = ancient)").defineInRange("max_craftable_rarity", 6, 0, 10);
+        String firstLine = "Shifts the min. rarity downwards by this value\n";
+        String secondLine = "Example with a value of 2 and attribute value of 3.5: Chance between common and epic rarity\n";
+        String thirdLine = "(Without a shift this would be a chance between rare and epic rarity)";
+        SHIFT_MIN_RARITY = BUILDER.comment(firstLine + secondLine + thirdLine).defineInRange("shift_min_rarity", 0, 0, 10);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
