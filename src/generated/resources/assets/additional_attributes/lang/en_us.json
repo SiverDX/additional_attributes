@@ -1,4 +1,6 @@
 {
+  "attribute.additional_attributes.apothic_crafting": "Apothic Crafting",
+  "attribute.additional_attributes.apothic_crafting.desc": "Grants the chance to craft affixed items (min. affix rarity will increase in increments of 100%)",
   "attribute.additional_attributes.fishing_luck": "Fishing Luck",
   "attribute.additional_attributes.fishing_luck.desc": "Modifies the fishing luck level of the player",
   "attribute.additional_attributes.fishing_lure": "Fishing Lure",

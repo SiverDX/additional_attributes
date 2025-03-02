@@ -14,6 +14,25 @@ Can be used to increase the amount of harvested items
 - `addition` of `1` means one additional crop (not seed)
 - The base value is the initial harvested amount
 
+# Apotheosis
+## Apothic Crafting
+An attribute that adds a chance to affix crafted items
+
+Logic works as follows (using the baseline `Apotheosis` rarities):
+- **0 to 1**: Chance between nothing happening and `common` rarity
+- **1 to 2**: Chance between `common` and `uncommon` rarity
+- **2 to 3**: Chance between `uncommon` and `rare` rarity
+- **3 to 4**: Chance between `rare` and `epic` rarity
+- **4 to 5**: Chance between `epic` and `mythic` rarity
+- **5 to 6**: Chance between `mythic` and `ancient` rarity
+- **6 to ?**    : Can only roll `ancient` rarity
+
+If the attribute value is exactly 0 nothing will happen
+
+A value of `1.3` has a 30% chance to consider `uncommon` rarity - The `luck` attribute will still affect the actually picked rarity
+
+There is a server config that can limit the max. crafted rarity
+
 # Iron's Spells 'n Spellbooks
 ## Increase or decrease spell levels
 - General attribute (meaning all spells) (`additional_attributes:spell_general`)

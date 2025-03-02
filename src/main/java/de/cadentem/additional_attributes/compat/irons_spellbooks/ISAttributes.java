@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ISAttributes {
-    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.Keys.ATTRIBUTES, AA.MODID);
+    public static final DeferredRegister<Attribute> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.ATTRIBUTES, AA.MODID);
     public static final List<Attribute> ATTRIBUTE_ENTRIES = new ArrayList<>();
 
     public static final String SEPARATOR = "/";
@@ -31,8 +31,8 @@ public class ISAttributes {
 
     public static final int LIMIT = 100;
 
-    public static RegistryObject<Attribute> KEEP_SCROLL = ATTRIBUTES.register("keep_scroll", () -> new RangedAttribute(AALanguageProvider.PREFIX + "keep_scroll", 0, 0, 1).setSyncable(true));
-    public static RegistryObject<Attribute> SPELL_GENERAL = ATTRIBUTES.register("spell_general", () -> new RangedAttribute(AALanguageProvider.PREFIX + "spell_general", 0, 0, LIMIT).setSyncable(true));
+    public static RegistryObject<Attribute> KEEP_SCROLL = REGISTRY.register("keep_scroll", () -> new RangedAttribute(AALanguageProvider.PREFIX + "keep_scroll", 0, 0, 1).setSyncable(true));
+    public static RegistryObject<Attribute> SPELL_GENERAL = REGISTRY.register("spell_general", () -> new RangedAttribute(AALanguageProvider.PREFIX + "spell_general", 0, 0, LIMIT).setSyncable(true));
 
     public static @Nullable Attribute getInnateSpell(final ResourceLocation resource) {
         return ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryBuild(AA.MODID, INNATE_SPELL_PREFIX + resource.getNamespace() + SEPARATOR + resource.getPath()));
@@ -50,7 +50,7 @@ public class ISAttributes {
     }
 
     public static void setAttributes(final EntityAttributeModificationEvent event) {
-        ATTRIBUTES.getEntries().forEach(attribute -> {
+        REGISTRY.getEntries().forEach(attribute -> {
             if (attribute == SPELL_GENERAL) {
                 event.getTypes().forEach(type -> event.add(type, attribute.get()));
             } else {

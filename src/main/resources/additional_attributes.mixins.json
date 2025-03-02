@@ -11,6 +11,7 @@
     "FishingHookMixin",
     "FishingRodMixin",
     "LivingEntityMixin",
+    "apotheosis.ItemMixin",
     "aquaculture.AquaFishingBobberEntityMixin",
     "aquaculture.AquaFishingRodItemMixin",
     "irons_spellbooks.AbstractEldritchSpellMixin",

@@ -1,6 +1,8 @@
 package de.cadentem.additional_attributes;
 
 import com.mojang.logging.LogUtils;
+import de.cadentem.additional_attributes.compat.Compat;
+import de.cadentem.additional_attributes.compat.apotheosis.ApothAttributes;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISEvents;
 import de.cadentem.additional_attributes.config.ClientConfig;
@@ -10,7 +12,6 @@ import de.cadentem.additional_attributes.registry.AAttributes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -28,12 +29,17 @@ public class AA {
         AALootModifiers.LOOT_MODIFIERS.register(modEventBus);
         AAttributes.ATTRIBUTES.register(modEventBus);
 
-        if (ModList.get().isLoaded("irons_spellbooks")) {
+        if (Compat.isModLoaded(Compat.IRONS_SPELLBOOKS)) {
+            ISAttributes.REGISTRY.register(modEventBus);
             modEventBus.addListener(EventPriority.LOWEST, ISEvents::registerAttributes);
             modEventBus.addListener(ISAttributes::setAttributes);
-            ISAttributes.ATTRIBUTES.register(modEventBus);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, ISEvents::modifyLevel);
             MinecraftForge.EVENT_BUS.addListener(ISEvents::modifySpellSelection);
+        }
+
+        if (Compat.isModLoaded(Compat.APOTHEOSIS)) {
+            ApothAttributes.REGISTRY.register(modEventBus);
+            modEventBus.addListener(ApothAttributes::setAttributes);
         }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);

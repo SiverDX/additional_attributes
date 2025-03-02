@@ -41,6 +41,9 @@ public class AALanguageProvider extends LanguageProvider {
         add(PREFIX + "harvest", "Harvesting");
         add(PREFIX + "harvest.desc", "Modifies the amount of harvested crops");
 
+        add(PREFIX + "apothic_crafting", "Apothic Crafting");
+        add(PREFIX + "apothic_crafting.desc", "Grants the chance to craft affixed items (min. affix rarity will increase in increments of 1)");
+
         add(PREFIX + "keep_scroll", "Keep Scroll");
         add(PREFIX + "keep_scroll.desc", "Chance to not use up a spell scroll");
         add(PREFIX + "spell_general", "General Spell Level");
