@@ -45,8 +45,8 @@ There is a server config that can limit the max. crafted rarity
     - Example: `additional_attributes:spell/traveloptics/orbital_void`
 
 How it works:
-- The base value of these attributes is the level of the spell being used - meaning `modify_base` will always have an effect
-- Spells with a maximum level of `1` won't have their spell level increased, since there usually is no reason to do so
+- The base value of these attributes is the level of the spell being used - meaning modifying the base has no effect
+- Spells with a maximum level of `1` won't have their spell level increased, since there usually is no reason to do so (configurable)
 - The three attribute types function as one - their modifiers are gathered together before calculation
 - There is no rounding - meaning a spell level of `1.75` will result in `1`
 - If the spell level reaches 0 (due to negative modifiers) the spell cannot be cast
