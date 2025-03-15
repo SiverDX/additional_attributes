@@ -69,6 +69,8 @@ public class RarityDefinition extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(@NotNull final Map<ResourceLocation, JsonElement> data, @NotNull final ResourceManager manager, @NotNull final ProfilerFiller profiler) {
         RegistryOps<JsonElement> serializer = RegistryOps.create(JsonOps.INSTANCE, access);
+        ENTRIES.clear();
+
         data.values().forEach(element -> Clamp.CODEC.decode(serializer, element).resultOrPartial(AA.LOG::error).ifPresent(result -> {
             Clamp clamp = result.getFirst();
 
