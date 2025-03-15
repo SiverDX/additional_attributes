@@ -31,7 +31,15 @@ If the attribute value is exactly 0 nothing will happen
 
 A value of `1.3` has a 30% chance to consider `uncommon` rarity - The `luck` attribute will still affect the actually picked rarity
 
-There is a server config that can limit the max. crafted rarity
+### Configurations:
+- There is a server config that can limit the max. crafted rarity
+- There is a blacklist item tag (`additional_attributes:apothic_crafting_blacklist`)
+- You can define min / max rarity clamps per items using a datapack (applies after the server config), see example of wooden tools:
+  - Directory: `additional_attributes/rarity_definitions`
+  - Clamp entry:
+    - `items`: A tag, single entry or a list of entries
+    - `min_rarity`: Min. rarity (if said rarity is above the max. rarity of the current attribute value, it will not be considered) (Optional)
+    - `max_rarity`: Max. rarity (if said rarity is above the max. rarity of the current attribute value, it will not be considered) (Optional)
 
 # Iron's Spells 'n Spellbooks
 ## Increase or decrease spell levels
