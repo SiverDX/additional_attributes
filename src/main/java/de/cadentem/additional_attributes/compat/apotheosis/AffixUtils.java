@@ -1,6 +1,8 @@
 package de.cadentem.additional_attributes.compat.apotheosis;
 
+import com.mojang.datafixers.util.Pair;
 import de.cadentem.additional_attributes.config.ServerConfig;
+import de.cadentem.additional_attributes.datagen.AAItemTags;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootController;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
@@ -15,6 +17,10 @@ import java.util.List;
 
 public class AffixUtils {
     public static void affixItem(final ItemStack stack, final Player player) {
+        if (stack.is(AAItemTags.APOTH_CRAFTING_BLACKLIST)) {
+            return;
+        }
+
         double crafting = player.getAttributeValue(ApothAttributes.APOTHIC_CRAFTING.get());
 
         if (crafting == 0 || LootCategory.forItem(stack) == LootCategory.NONE) {
@@ -54,7 +60,8 @@ public class AffixUtils {
             shift++;
         }
 
-        LootRarity rarity = LootRarity.random(player.getRandom(), player.getLuck(), new RarityClamp.Simple(min, max));
+        Pair<DynamicHolder<LootRarity>, DynamicHolder<LootRarity>> clamp = RarityDefinition.clamp(stack, min, max);
+        LootRarity rarity = LootRarity.random(player.getRandom(), player.getLuck(), new RarityClamp.Simple(clamp.getFirst(), clamp.getSecond()));
         LootController.createLootItem(stack, rarity, player.getRandom());
     }
 

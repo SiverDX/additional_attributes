@@ -3,6 +3,7 @@ package de.cadentem.additional_attributes;
 import com.mojang.logging.LogUtils;
 import de.cadentem.additional_attributes.compat.Compat;
 import de.cadentem.additional_attributes.compat.apotheosis.ApothAttributes;
+import de.cadentem.additional_attributes.compat.apotheosis.RarityDefinition;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISEvents;
 import de.cadentem.additional_attributes.config.ClientConfig;
@@ -40,6 +41,7 @@ public class AA {
         if (Compat.isModLoaded(Compat.APOTHEOSIS)) {
             ApothAttributes.REGISTRY.register(modEventBus);
             modEventBus.addListener(ApothAttributes::setAttributes);
+            MinecraftForge.EVENT_BUS.addListener(RarityDefinition::register);
         }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
