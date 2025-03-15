@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class AAItemTags extends ItemTagsProvider {
-    public static final TagKey<Item> APOTH_CRAFTING_BLACKLIST = TagKey.create(Registries.ITEM, new ResourceLocation(AA.MODID, "apoth_crafting_blacklist"));
+    public static final TagKey<Item> APOTH_CRAFTING_BLACKLIST = TagKey.create(Registries.ITEM, new ResourceLocation(AA.MODID, "apothic_crafting_blacklist"));
 
     public AAItemTags(final PackOutput output, final CompletableFuture<HolderLookup.Provider> lookup, final CompletableFuture<TagLookup<Block>> blockTags, @Nullable final ExistingFileHelper helper) {
         super(output, lookup, blockTags, AA.MODID, helper);
