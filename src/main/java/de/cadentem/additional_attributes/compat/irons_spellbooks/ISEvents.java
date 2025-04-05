@@ -1,6 +1,6 @@
 package de.cadentem.additional_attributes.compat.irons_spellbooks;
 
-import de.cadentem.additional_attributes.config.ClientConfig;
+import de.cadentem.additional_attributes.config.ServerConfig;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -76,7 +76,7 @@ public class ISEvents {
             if (level > 0) {
                 boolean shouldAdd = true;
 
-                if (ClientConfig.SKIP_INNATE.get()) {
+                if (ServerConfig.SKIP_INNATE.get()) {
                     List<SpellData> spellEntries = event.getManager().getAllSpells().stream().filter(option -> option.spellData.getSpell() == spell).map(option -> option.spellData).toList();
 
                     for (SpellData entry : spellEntries) {

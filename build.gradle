@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.neoforged.gradle.userdev' version '7.0.184'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -16,7 +16,6 @@ group = mod_group_id
 repositories {
     mavenLocal()
     flatDir { dirs 'dev' }
-    maven { url = "https://jitpack.io" } // Mixin Squared
     maven { url = "https://www.cursemaven.com" } // CurseForge
 }
 
@@ -39,7 +38,6 @@ runs {
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
     }
 
     gameTestServer {
@@ -61,9 +59,9 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     /* --- Compatibility --- */
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:5983204" // 3.8.6
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:6359979" // 3.11.0
     implementation "curse.maven:caelus-308989:5442975" // 7.0.0
-    implementation "curse.maven:geckolib-388172:5664570" // 4.6.2
+    implementation "curse.maven:geckolib-388172:6304958" // 4.7.5.1
     implementation "curse.maven:adorned-1036809:5652826" // 9.1.2
     implementation "curse.maven:playeranimator-658587:5698755" // 2.0.0
 

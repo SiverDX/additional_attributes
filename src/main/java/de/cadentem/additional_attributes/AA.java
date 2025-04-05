@@ -3,7 +3,6 @@ package de.cadentem.additional_attributes;
 import com.mojang.logging.LogUtils;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISEvents;
-import de.cadentem.additional_attributes.config.ClientConfig;
 import de.cadentem.additional_attributes.config.ServerConfig;
 import de.cadentem.additional_attributes.registry.AALootModifiers;
 import de.cadentem.additional_attributes.registry.AAttributes;
@@ -34,6 +33,5 @@ public class AA {
         }
 
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-        container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 }
