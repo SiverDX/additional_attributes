@@ -22,7 +22,7 @@ Can be used to increase the amount of harvested items
   - Example: `additional_attributes:spell/irons_spellbooks/magma_bomb`
 
 How it works:
-- The base value of these attributes is the level of the spell being used - meaning `modify_base` will always have an effect
+- The base value of these attributes is the level of the spell being used - meaning modifying the base has no effect
 - Spells with a maximum level of `1` won't have their spell level increased, since there usually is no reason to do so
 - The three attribute types function as one - their modifiers are gathered together before calculation
 - There is no rounding - meaning a spell level of `1.75` will result in `1`
