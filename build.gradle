@@ -73,7 +73,7 @@ dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
 
     /* --- Other --- */
-    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6054196") // 3.4.0.7
+    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6371701") // 3.4.0.8
     implementation fg.deobf("curse.maven:playeranimator-658587:4587214") // 1.0.2
     implementation fg.deobf("curse.maven:caelus-308989:4581481") // 3.1.0
     implementation fg.deobf("curse.maven:geckolib-388172:5021668") // 4.4

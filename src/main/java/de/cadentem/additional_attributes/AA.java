@@ -6,7 +6,6 @@ import de.cadentem.additional_attributes.compat.apotheosis.ApothAttributes;
 import de.cadentem.additional_attributes.compat.apotheosis.RarityDefinition;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISAttributes;
 import de.cadentem.additional_attributes.compat.irons_spellbooks.ISEvents;
-import de.cadentem.additional_attributes.config.ClientConfig;
 import de.cadentem.additional_attributes.config.ServerConfig;
 import de.cadentem.additional_attributes.registry.AALootModifiers;
 import de.cadentem.additional_attributes.registry.AAttributes;
@@ -45,6 +44,5 @@ public class AA {
         }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 }
