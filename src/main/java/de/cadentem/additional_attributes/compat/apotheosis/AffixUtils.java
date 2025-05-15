@@ -17,6 +17,11 @@ import java.util.List;
 
 public class AffixUtils {
     public static void affixItem(final ItemStack stack, final Player player) {
+        if (player == null || stack.isEmpty()) {
+            // Should not happen but mods do weird things
+            return;
+        }
+
         if (stack.is(AAItemTags.APOTH_CRAFTING_BLACKLIST)) {
             return;
         }
