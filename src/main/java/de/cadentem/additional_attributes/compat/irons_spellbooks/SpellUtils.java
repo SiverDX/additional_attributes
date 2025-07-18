@@ -28,12 +28,16 @@ public class SpellUtils {
         ResourceLocation spellResource = spell.getSpellResource();
         ResourceLocation schoolResource = spell.getSchoolType().getId();
 
-        if (spellResource.getNamespace().equals(IronsSpellbooks.MODID)) {
-            // To keep compatibility with previous versions
+        if (schoolResource.getNamespace().equals(IronsSpellbooks.MODID)) {
             schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX + schoolResource.getPath()));
-            spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX + spell.getSpellName()));
         } else {
             schoolAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SCHOOL_PREFIX_NEW + schoolResource.getNamespace() + ISAttributes.SEPARATOR + schoolResource.getPath()));
+        }
+
+        if (spellResource.getNamespace().equals(IronsSpellbooks.MODID)) {
+            // To keep compatibility with previous versions
+            spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX + spell.getSpellName()));
+        } else {
             spellAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(AA.MODID, ISAttributes.SPELL_PREFIX_NEW + spellResource.getNamespace() + ISAttributes.SEPARATOR + spellResource.getPath()));
         }
 
