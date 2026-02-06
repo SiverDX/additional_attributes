@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SpellUtils {
     public static int calculateSpellLevel(@Nullable final LivingEntity livingEntity, final AbstractSpell spell, int originalLevel) {
@@ -26,8 +27,22 @@ public class SpellUtils {
         ResourceLocation spellResource = spell.getSpellResource();
         ResourceLocation schoolResource = spell.getSchoolType().getId();
 
-        Holder<Attribute> schoolAttribute = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(ResourceKey.create(BuiltInRegistries.ATTRIBUTE.key(), ResourceLocation.fromNamespaceAndPath(AA.MODID, ISAttributes.SCHOOL_PREFIX + schoolResource.getNamespace() + ISAttributes.SEPARATOR + schoolResource.getPath())));
-        Holder<Attribute> spellAttribute = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(ResourceKey.create(BuiltInRegistries.ATTRIBUTE.key(), ResourceLocation.fromNamespaceAndPath(AA.MODID, ISAttributes.SPELL_PREFIX + spellResource.getNamespace() + ISAttributes.SEPARATOR + spellResource.getPath())));
+        Optional<Holder.Reference<Attribute>> schoolHolder = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceKey.create(BuiltInRegistries.ATTRIBUTE.key(), ResourceLocation.fromNamespaceAndPath(AA.MODID, ISAttributes.SCHOOL_PREFIX + schoolResource.getNamespace() + ISAttributes.SEPARATOR + schoolResource.getPath())));
+
+        if (schoolHolder.isEmpty()) {
+            AA.LOG.warn("Spell school [{}] could not be found - potentially incorrectly defined within the related mod?", schoolResource);
+            return originalLevel;
+        }
+
+        Optional<Holder.Reference<Attribute>> spellHolder = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceKey.create(BuiltInRegistries.ATTRIBUTE.key(), ResourceLocation.fromNamespaceAndPath(AA.MODID, ISAttributes.SPELL_PREFIX + spellResource.getNamespace() + ISAttributes.SEPARATOR + spellResource.getPath())));
+
+        if (spellHolder.isEmpty()) {
+            AA.LOG.warn("Spell [{}] could not be found - potentially incorrectly defined within the related mod?", spellResource);
+            return originalLevel;
+        }
+
+        Holder<Attribute> schoolAttribute = schoolHolder.get();
+        Holder<Attribute> spellAttribute = spellHolder.get();
 
         List<AttributeModifier> addition = new ArrayList<>();
         List<AttributeModifier> multiplyBase = new ArrayList<>();
@@ -54,7 +69,7 @@ public class SpellUtils {
         }
 
         if (spell.getMaxLevel() == 1 && result > 1 && !ServerConfig.ALLOW_MAX_LEVEL_ONE_INCREASES.get()) {
-            // Normally this means the spell does not scale with level
+            // Normally this means the spell does not scale with levels
             return originalLevel;
         }
 
