@@ -37,7 +37,7 @@ public class AALanguageProvider extends LanguageProvider {
         add(PREFIX + "looting", "Looting");
         add(PREFIX + "looting.desc", "Modifies the looting level of the player");
         add(PREFIX + "respiration", "Respiration");
-        add(PREFIX + "respiration.desc", "Modifies the respiration level of the player");
+        add(PREFIX + "respiration.desc", "Unused and scheduled for removal (replaced by [minecraft:generic.oxygen_bonus])");
         add(PREFIX + "harvest", "Harvesting");
         add(PREFIX + "harvest.desc", "Modifies the amount of harvested crops");
 

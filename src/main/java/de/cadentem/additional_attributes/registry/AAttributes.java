@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class AAttributes {
     public static final int MAX = 1024;
 
@@ -23,6 +23,7 @@ public class AAttributes {
     public static final DeferredHolder<Attribute, Attribute> FISHING_LURE = createAttribute("fishing_lure");
     public static final DeferredHolder<Attribute, Attribute> FISHING_LUCK = createAttribute("fishing_luck");
     public static final DeferredHolder<Attribute, Attribute> LOOTING = createAttribute("looting");
+    // FIXME :: remove
     public static final DeferredHolder<Attribute, Attribute> RESPIRATION = createAttribute("respiration");
     public static final DeferredHolder<Attribute, Attribute> HARVEST_BONUS = createAttribute("harvest");
 

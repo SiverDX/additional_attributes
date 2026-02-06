@@ -240,7 +240,7 @@
   "attribute.additional_attributes.looting": "Looting",
   "attribute.additional_attributes.looting.desc": "Modifies the looting level of the player",
   "attribute.additional_attributes.respiration": "Respiration",
-  "attribute.additional_attributes.respiration.desc": "Modifies the respiration level of the player",
+  "attribute.additional_attributes.respiration.desc": "Unused and scheduled for removal (replaced by [minecraft:generic.oxygen_bonus])",
   "attribute.additional_attributes.spell/irons_spellbooks/abyssal_shroud": "Shroud Spell Level",
   "attribute.additional_attributes.spell/irons_spellbooks/abyssal_shroud.desc": "Modifies the level of this spell",
   "attribute.additional_attributes.spell/irons_spellbooks/acid_orb": "Orb Spell Level",
